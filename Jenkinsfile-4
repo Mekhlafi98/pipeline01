@@ -38,14 +38,14 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            script {
-                // Optionally clean up by stopping and removing the container
-                // Uncomment the following lines if you want to clean up after the build
-                // sh "docker stop ${env.CONTAINER_NAME}"
-                // sh "docker rm ${env.CONTAINER_NAME}"
-            }
-        }
-    }
+    // post {
+    //     always {
+    //         script {
+    //             // Optionally clean up by stopping and removing the container
+    //             // Uncomment the following lines if you want to clean up after the build
+    //             // sh "docker stop ${env.CONTAINER_NAME}"
+    //             // sh "docker rm ${env.CONTAINER_NAME}"
+    //         }
+    //     }
+    // }
 }
