@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+    environment {
+        IMAGE_NAME = 'my-docker-image'
+        CONTAINER_NAME = 'my-docker-container'
+    }
+    stages {
+        stage('Build Docker Image') {
+            agent {
+                dockerfile {
+                    // Use the Dockerfile in the root of the repository
+                    dir '.'
+                }
+            }
+            steps {
+                script {
+                    // Build the Docker image
+                    sh "docker build -t ${env.IMAGE_NAME} ."
+                }
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Start the Docker container in detached mode
+                    sh "docker run -d --name ${env.CONTAINER_NAME} ${env.IMAGE_NAME}"
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                script {
+                    // Execute commands inside the running container
+                    sh "docker exec ${env.CONTAINER_NAME} node --version"
+                    sh "docker exec ${env.CONTAINER_NAME} git --version"
+                    sh "docker exec ${env.CONTAINER_NAME} curl --version"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            script {
+                // Optionally clean up by stopping and removing the container
+                // Uncomment the following lines if you want to clean up after the build
+                // sh "docker stop ${env.CONTAINER_NAME}"
+                // sh "docker rm ${env.CONTAINER_NAME}"
+            }
+        }
+    }
+}
