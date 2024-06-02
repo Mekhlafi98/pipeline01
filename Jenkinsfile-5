@@ -6,7 +6,7 @@ node {
   def image = docker.build("your-image-name:${env.BUILD_ID}")
 
   // Configure registry (replace with your details)
-  docker.withRegistry('https://localhost:9443/', 'registry_credentials_id') {
+  docker.withRegistry('https://localhost:9443/', 'docker_hub_id') {
     // Push the image with build number and "latest" tag
     image.push("${env.BUILD_NUMBER}")
     image.push("latest")
