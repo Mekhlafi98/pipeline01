@@ -6,7 +6,7 @@ node {
   def image = docker.build("your-image-name:${env.BUILD_ID}")
 
   // Configure registry (replace with your details)
-  docker.withRegistry('http://localhost:8081/', 'nexus_credentials_id') {
+  docker.withRegistry('http://localhost:8081', 'nexus_credentials_id') {
     // Push the image with build number and "latest" tag
     image.push("${env.BUILD_NUMBER}")
     image.push("latest")
