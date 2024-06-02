@@ -1,23 +1,14 @@
-#!groovy
+node {
+  // Checkout your code from SCM (e.g., Git)
+  checkout scm
 
-pipeline {
-  agent {none true}
-  stages {
-    stage('Maven Install') {
-      agent {
-        docker {
-          image 'maven:3.5.0'
-        }
-      }
-    //   steps {
-    //     sh 'mvn clean install'
-    //   }
-    }
-    stage('Docker Build') {
-      agent any
-      steps {
-        sh 'docker build -t shanem/spring-petclinic:latest .'
-      }
-    }
+  // Build the image using docker.build
+  def image = docker.build("your-image-name:${env.BUILD_ID}")
+
+  // Configure registry (replace with your details)
+  docker.withRegistry('https://localhost:9443/', 'registry_credentials_id') {
+    // Push the image with build number and "latest" tag
+    image.push("${env.BUILD_NUMBER}")
+    image.push("latest")
   }
 }
